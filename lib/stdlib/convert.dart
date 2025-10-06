@@ -1,4 +1,5 @@
 /// Provides dart:convert bridge classes and wrappers
+// ignore: unnecessary_library_name
 library dart_eval.stdlib.convert;
 
 export '../src/eval/shared/stdlib/convert/codec.dart';

@@ -1,3 +1,4 @@
+// ignore: unnecessary_library_name
 library dart_eval.bridge;
 
 export 'package:pub_semver/pub_semver.dart' show Version;

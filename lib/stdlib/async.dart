@@ -1,4 +1,5 @@
 /// Provides dart:async bridge classes and wrappers
+// ignore: unnecessary_library_name
 library dart_eval.stdlib.async;
 
 export '../src/eval/shared/stdlib/async/future.dart';

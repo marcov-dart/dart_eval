@@ -1,4 +1,5 @@
 /// A library providing a Dart bytecode compiler and interpreter.
+// ignore: unnecessary_library_name
 library dart_eval;
 
 export 'src/eval/eval.dart';

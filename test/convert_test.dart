@@ -1,4 +1,5 @@
 @TestOn('vm')
+// ignore: unnecessary_library_name
 library convert_test;
 
 import 'package:dart_eval/dart_eval.dart';

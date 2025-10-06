@@ -1,4 +1,5 @@
 /// Provides dart:io bridge classes and wrappers
+// ignore: unnecessary_library_name
 library dart_eval.stdlib.io;
 
 export '../src/eval/shared/stdlib/io/directory.dart';

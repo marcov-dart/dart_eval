@@ -1,4 +1,5 @@
 /// Provides dart:core bridge classes and wrappers
+// ignore: unnecessary_library_name
 library dart_eval.stdlib.core;
 
 export '../src/eval/shared/stdlib/core/base.dart';
