@@ -21,7 +21,7 @@ import 'package:path/path.dart' as p;
 ///   CurrentDirIOOverrides('/my/custom/path'),
 /// );
 /// ```
-class CurrentDirIOOverrides extends IOOverrides {
+final class CurrentDirIOOverrides extends IOOverrides {
   final String currentDir;
   CurrentDirIOOverrides(this.currentDir);
 

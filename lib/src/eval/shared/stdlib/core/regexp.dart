@@ -147,6 +147,7 @@ class $RegExp implements $Instance {
   int $getRuntimeType(Runtime runtime) => runtime.lookupType($type.spec!);
 }
 
+// ignore: deprecated_implement
 class $RegExpMatch implements $Instance, RegExpMatch {
   /// Compile-time type reference to [RegExpMatch]
   static const $type =
