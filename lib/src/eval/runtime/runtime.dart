@@ -256,11 +256,29 @@ class Runtime {
     _plugins.add(plugin);
   }
 
+  /// Get the index of the bridged runtime top-level/static function or
+  /// class constructor by library and name.
+  int? _indexOfBridgeFunc(String library, String name) {
+    var index = 0;
+    for (final item in _unloadedBrFunc) {
+      if (item.library == library && item.name == name) {
+        return index;
+      }
+      index++;
+    }
+    return null;
+  }
+
   /// Register a bridged runtime top-level/static function or class constructor.
   void registerBridgeFunc(String library, String name, EvalCallableFunc fn,
       {bool isBridge = false}) {
-    _unloadedBrFunc
-        .add(_UnloadedBridgeFunction(library, isBridge ? '#$name' : name, fn));
+    var index = _indexOfBridgeFunc(library, name);
+
+    // Only add if there currently is no entry.
+    if (index == null) {
+      _unloadedBrFunc.add(
+          _UnloadedBridgeFunction(library, isBridge ? '#$name' : name, fn));
+    }
   }
 
   /// Register bridged runtime enum values.
