@@ -882,7 +882,7 @@ Variable _declarationToVariable(
     returnType = TypeRef.lookupDeclaration(
       ctx,
       decOrBridge.sourceLib,
-      decl.parent as ClassDeclaration,
+      decl.parent!.parent as ClassDeclaration,
     );
   }
 
