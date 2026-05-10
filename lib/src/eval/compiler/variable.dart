@@ -321,12 +321,6 @@ class InvokeResult {
 class PossiblyValuedParameter {
   PossiblyValuedParameter(this.parameter, this.V);
 
-  /* TODO?
-normalFormalParameter ::=
-///        [FunctionTypedFormalParameter]
-///      | [FieldFormalParameter]
-///      | [SimpleFormalParameter]
-  */
   FormalParameter parameter;
   Variable? V;
 }
