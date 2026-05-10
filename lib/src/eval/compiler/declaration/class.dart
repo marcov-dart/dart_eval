@@ -4,6 +4,8 @@ import 'package:dart_eval/src/eval/compiler/declaration/constructor.dart';
 import 'package:dart_eval/src/eval/compiler/declaration/declaration.dart';
 import 'package:dart_eval/src/eval/compiler/type.dart';
 
+import '../../utils/class_declartation_helper.dart';
+
 void compileClassDeclaration(
   CompilerContext ctx,
   ClassDeclaration d, {
@@ -22,7 +24,7 @@ void compileClassDeclaration(
   final constructors = <ConstructorDeclaration>[];
   final fields = <FieldDeclaration>[];
   final methods = <MethodDeclaration>[];
-  // ignore: deprecated_member_use
+
   for (final m in d.members) {
     if (m is ConstructorDeclaration) {
       constructors.add(m);

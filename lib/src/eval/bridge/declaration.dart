@@ -3,6 +3,7 @@ import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/src/eval/compiler/util.dart';
 
 import '../compiler/errors.dart';
+import '../utils/class_declartation_helper.dart';
 
 /// A Bridge declaration declares an element that is transferrable between the
 /// Dart and dart_eval VM.
@@ -76,7 +77,6 @@ class DeclarationOrBridge<T extends Declaration, R extends BridgeDeclaration> {
           yield Pair(dName, d);
 
           /// Then also yield the static class members
-          // ignore: deprecated_member_use
           for (final member in declaration.members) {
             if (member is ConstructorDeclaration) {
               yield Pair(
