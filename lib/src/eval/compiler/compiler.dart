@@ -1012,7 +1012,7 @@ List<Library> _buildLibraries(Iterable<DartCompilationUnit> units) {
     uriMap[unit.uri.toString()] = i;
     if (unit.library != null && unit.library!.name != null) {
       /// Library instruction for source files that start with "library *****"
-      libraryIdMap[unit.library!.name!.name] = i;
+      libraryIdMap[unit.library!.name!.toString()] = i;
     }
     i++;
   }
@@ -1040,7 +1040,7 @@ List<Library> _buildLibraries(Iterable<DartCompilationUnit> units) {
     final primary = compilationUnitMap[primaryId]!;
     final library = Library(
       primary.uri,
-      library: primary.library?.name?.name,
+      library: primary.library?.name?.toString(),
       imports: primary.imports,
       exports: primary.exports,
       declarations: group
