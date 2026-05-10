@@ -70,7 +70,7 @@ class IdentifierReference implements Reference {
       final instanceDeclaration = resolveInstanceDeclaration(
         ctx,
         ctx.library,
-        ctx.currentClass!.name.lexeme,
+        ctx.currentClassName!,
         name,
       );
       if (instanceDeclaration != null) {
@@ -82,7 +82,7 @@ class IdentifierReference implements Reference {
       final staticDeclaration = resolveStaticDeclaration(
         ctx,
         ctx.library,
-        ctx.currentClass!.name.lexeme,
+        ctx.currentClassName!,
         name,
       );
 
@@ -91,8 +91,7 @@ class IdentifierReference implements Reference {
         if (staticDec is MethodDeclaration) {
           return CoreTypes.function.ref(ctx);
         } else if (staticDec is VariableDeclaration) {
-          final name =
-              '${ctx.currentClass!.name.lexeme}.${staticDec.name.lexeme}';
+          final name = '${ctx.currentClassName!}.${staticDec.name.lexeme}';
           return ctx.topLevelVariableInferredTypes[ctx.library]![name]!;
         }
       }
@@ -197,7 +196,7 @@ class IdentifierReference implements Reference {
       final instanceDeclaration = resolveInstanceDeclaration(
         ctx,
         ctx.library,
-        ctx.currentClass!.name.lexeme,
+        ctx.currentClassName!,
         name,
       );
       if (instanceDeclaration != null) {
@@ -351,7 +350,7 @@ class IdentifierReference implements Reference {
       final instanceDeclaration = resolveInstanceDeclaration(
         ctx,
         ctx.library,
-        ctx.currentClass!.name.lexeme,
+        ctx.currentClassName!,
         name,
       );
       if (instanceDeclaration != null) {
@@ -370,7 +369,7 @@ class IdentifierReference implements Reference {
               CoreTypes.function.ref(ctx),
               methodOffset: DeferredOrOffset(
                 file: ctx.library,
-                className: ctx.currentClass!.name.lexeme,
+                className: ctx.currentClassName!,
                 name: _refName,
                 targetScopeFrameOffset: $this.scopeFrameOffset,
               ),
@@ -404,7 +403,7 @@ class IdentifierReference implements Reference {
               ),
               methodOffset: DeferredOrOffset(
                 file: ctx.library,
-                className: ctx.currentClass!.name.lexeme,
+                className: ctx.currentClassName!,
                 name: _refName,
               ),
             );
@@ -416,7 +415,7 @@ class IdentifierReference implements Reference {
               CoreTypes.function.ref(ctx),
               methodOffset: DeferredOrOffset(
                 file: ctx.library,
-                className: ctx.currentClass!.name.lexeme,
+                className: ctx.currentClassName!,
                 name: name,
               ),
             );
@@ -432,7 +431,7 @@ class IdentifierReference implements Reference {
               ),
               methodOffset: DeferredOrOffset(
                 file: ctx.library,
-                className: ctx.currentClass!.name.lexeme,
+                className: ctx.currentClassName!,
                 name: _refName,
               ),
             );
@@ -453,7 +452,7 @@ class IdentifierReference implements Reference {
       final staticDeclaration = resolveStaticDeclaration(
         ctx,
         ctx.library,
-        ctx.currentClass!.name.lexeme,
+        ctx.currentClassName!,
         name,
       );
 
@@ -466,13 +465,12 @@ class IdentifierReference implements Reference {
             methodOffset: DeferredOrOffset.lookupStatic(
               ctx,
               ctx.library,
-              ctx.currentClass!.name.lexeme,
+              ctx.currentClassName!,
               _refName,
             ),
           );
         } else if (staticDec is VariableDeclaration) {
-          final name =
-              '${ctx.currentClass!.name.lexeme}.${staticDec.name.lexeme}';
+          final name = '${ctx.currentClassName!}.${staticDec.name.lexeme}';
           final type = ctx.topLevelVariableInferredTypes[ctx.library]![name]!;
           final gIndex = ctx.topLevelGlobalIndices[ctx.library]![name]!;
           ctx.pushOp(LoadGlobal.make(gIndex), LoadGlobal.LEN);
@@ -832,8 +830,6 @@ Variable _declarationToVariable(
   }
 
   if (decl is! FunctionDeclaration && decl is! ConstructorDeclaration) {
-    decl as NamedCompilationUnitMember;
-
     final returnType = TypeRef.lookupDeclaration(
       ctx,
       decOrBridge.sourceLib,
@@ -893,8 +889,10 @@ Variable _declarationToVariable(
   } else {
     final cls = decl.parent;
     String? className;
-    if (cls is NamedCompilationUnitMember) {
-      className = cls.name.lexeme;
+    if (cls is ClassDeclaration) {
+      className = cls.namePart.toString();
+    } else {
+      throw CompileError('Unsupported!');
     }
     offset = DeferredOrOffset(
       file: decOrBridge.sourceLib,

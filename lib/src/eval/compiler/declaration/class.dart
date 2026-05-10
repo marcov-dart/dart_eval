@@ -11,7 +11,7 @@ void compileClassDeclaration(
 }) {
   final $runtimeType =
       ctx.typeRefIndexMap[TypeRef.lookupDeclaration(ctx, ctx.library, d)];
-  final clsName = d.name.lexeme;
+  final clsName = d.namePart.toString();
   ctx.instanceDeclarationPositions[ctx.library]![clsName] = [
     {},
     {},
@@ -22,6 +22,7 @@ void compileClassDeclaration(
   final constructors = <ConstructorDeclaration>[];
   final fields = <FieldDeclaration>[];
   final methods = <MethodDeclaration>[];
+  // ignore: deprecated_member_use
   for (final m in d.members) {
     if (m is ConstructorDeclaration) {
       constructors.add(m);

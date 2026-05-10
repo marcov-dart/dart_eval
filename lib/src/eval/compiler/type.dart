@@ -291,8 +291,27 @@ class TypeRef {
     }
     final ref = typeReference.ref;
     if (ref != null) {
-      specifiedType ??=
-          ctx.visibleTypes[ctx.library]![ctx.currentClass?.name.stringValue];
+      final currentClass = ctx.currentClass;
+
+      // This looks very similar to ctx.currentClassName but it is not the
+      // same.
+      // currentClassName is currentClass.namePart.toString()
+      // (used tp be currentClass.name.lexeme)
+      final name = switch (currentClass) {
+        ClassDeclaration() => currentClass.namePart.typeName.stringValue,
+        EnumDeclaration() => currentClass.namePart.typeName.stringValue,
+        null => null,
+        _ => throw UnimplementedError(),
+      };
+
+      /*
+      // Is this correct? Is name ever NOT NULL? Not in any of the tests!
+      if (name != null) {
+        print('');
+      }
+      */
+
+      specifiedType ??= ctx.visibleTypes[ctx.library]![name];
 
       if (specifiedType == null) {
         return CoreTypes.dynamic.ref(ctx);
@@ -380,12 +399,18 @@ class TypeRef {
   factory TypeRef.lookupDeclaration(
     CompilerContext ctx,
     int library,
-    NamedCompilationUnitMember dec, {
+    Declaration dec, {
     String? prefix,
   }) {
+    final name = switch (dec) {
+      ClassDeclaration() => dec.namePart.toString(),
+      EnumDeclaration() => dec.namePart.toString(),
+      Declaration() => throw UnimplementedError(),
+    };
+
     return ctx
-            .visibleTypes[library]!['${prefix != null ? '$prefix.' : ''}${dec.name.lexeme}'] ??
-        (throw CompileError('Class/enum ${dec.name.value()} not found'));
+            .visibleTypes[library]!['${prefix != null ? '$prefix.' : ''}$name'] ??
+        (throw CompileError('Class/enum $name not found'));
   }
 
   static TypeRef? lookupFieldType(
@@ -531,7 +556,7 @@ class TypeRef {
           source,
         );
       }
-      final dec0 = dec.declaration as NamedCompilationUnitMember;
+      final dec0 = dec.declaration;
       final $extends = dec0 is ClassDeclaration ? dec0.extendsClause : null;
       if ($extends == null) {
         if ($class == CoreTypes.object.ref(ctx)) {
@@ -696,8 +721,8 @@ class TypeRef {
           ? dec.implementsClause
           : (dec as EnumDeclaration).implementsClause;
       final typeParameters = dec is ClassDeclaration
-          ? dec.typeParameters
-          : (dec as EnumDeclaration).typeParameters;
+          ? dec.namePart.typeParameters
+          : (dec as EnumDeclaration).namePart.typeParameters;
       superName = extendsClause?.superclass;
       withNames = withClause?.mixinTypes.toList() ?? [];
       implementsNames = implementsClause?.interfaces.toList() ?? [];

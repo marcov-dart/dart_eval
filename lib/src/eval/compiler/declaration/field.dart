@@ -11,9 +11,14 @@ void compileFieldDeclaration(
   int fieldIndex,
   FieldDeclaration d,
   CompilerContext ctx,
-  NamedCompilationUnitMember parent,
+  Declaration parent,
 ) {
-  final parentName = parent.name.lexeme;
+  final parentName = switch (parent) {
+    ClassDeclaration() => parent.namePart.toString(),
+    EnumDeclaration() => parent.namePart.toString(),
+    Declaration() => throw UnimplementedError(),
+  };
+
   var fieldIndex0 = fieldIndex;
   for (final field in d.fields.variables) {
     final fieldName = field.name.lexeme;

@@ -175,7 +175,18 @@ class CompilerContext with ScopeContext {
   final out = <EvcOp>[];
   int library = 0;
   int position = 0;
-  NamedCompilationUnitMember? currentClass;
+  Declaration? currentClass;
+
+  String? get currentClassName {
+    final currentClass = this.currentClass;
+
+    return switch (currentClass) {
+      ClassDeclaration() => currentClass.namePart.toString(),
+      EnumDeclaration() => currentClass.namePart.toString(),
+      Declaration() => throw UnimplementedError(),
+      null => null,
+    };
+  }
 
   /// A map of library IDs / indexes to a map of String declaration names to
   /// [DeclarationOrBridge]s. See [Compiler._topLevelDeclarationsMap] from which
