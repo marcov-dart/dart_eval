@@ -99,7 +99,7 @@ void compileConstructorDeclaration(
     final p = param.parameter;
     final V = param.V;
     Variable vrep;
-    if ($redirectingInitializer != null && p is! SimpleFormalParameter) {
+    if ($redirectingInitializer != null && p is! RegularFormalParameter) {
       throw CompileError(
         'Redirecting constructor invocation cannot have super or this parameters',
         d,
@@ -133,7 +133,6 @@ void compileConstructorDeclaration(
       ).boxIfNeeded(ctx)..name = p.name.lexeme;
       superParams.add(p.name.lexeme);
     } else {
-      p as SimpleFormalParameter;
       var type = CoreTypes.dynamic.ref(ctx);
       if (p.type != null) {
         type = TypeRef.fromAnnotation(ctx, ctx.library, p.type!);

@@ -97,7 +97,6 @@ extension TearOff on Variable {
       final p = param.parameter;
       Variable vRep;
 
-      p as SimpleFormalParameter;
       var type = CoreTypes.dynamic.ref(ctx);
       if (p.type != null) {
         type = TypeRef.fromAnnotation(ctx, ctx.library, p.type!);
@@ -169,12 +168,7 @@ extension TearOff on Variable {
         .length;
 
     final positionalArgTypes = positional
-        .map(
-          (a) => a is NormalFormalParameter
-              ? a
-              : (a as DefaultFormalParameter).parameter,
-        )
-        .cast<SimpleFormalParameter>()
+        .cast<RegularFormalParameter>()
         .map(
           (a) => a.type == null
               ? CoreTypes.dynamic.ref(ctx)
@@ -194,8 +188,7 @@ extension TearOff on Variable {
         .toList();
 
     final sortedNamedArgTypes = sortedNamedArgs
-        .map((e) => e is DefaultFormalParameter ? e.parameter : e)
-        .cast<SimpleFormalParameter>()
+        .cast<RegularFormalParameter>()
         .map(
           (a) => a.type == null
               ? CoreTypes.dynamic.ref(ctx)

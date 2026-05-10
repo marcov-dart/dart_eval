@@ -28,8 +28,8 @@ void compileFunctionDeclaration(FunctionDeclaration d, CompilerContext ctx) {
     final name = oArgs.first as StringLiteral;
     String? version;
     if (oArgs.length == 2) {
-      final exp = (oArgs[1] as NamedExpression);
-      if (exp.name.label.name != 'version') {
+      final exp = (oArgs[1] as NamedArgument);
+      if (exp.name.toString() != 'version') {
         throw CompileError(
           'Invalid @RuntimeOverride annotation',
           d,
@@ -37,7 +37,7 @@ void compileFunctionDeclaration(FunctionDeclaration d, CompilerContext ctx) {
           ctx,
         );
       }
-      final version0 = exp.expression as StringLiteral;
+      final version0 = exp.argumentExpression as StringLiteral;
       version = version0.stringValue;
     }
     final overrideName = name.stringValue!;
@@ -69,7 +69,6 @@ void compileFunctionDeclaration(FunctionDeclaration d, CompilerContext ctx) {
     final p = param.parameter;
     Variable vRep;
 
-    p as SimpleFormalParameter;
     var type = CoreTypes.dynamic.ref(ctx);
     if (p.type != null) {
       type = TypeRef.fromAnnotation(ctx, ctx.library, p.type!);

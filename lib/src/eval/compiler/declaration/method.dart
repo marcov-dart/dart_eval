@@ -40,7 +40,6 @@ int compileMethodDeclaration(
   for (final param in resolvedParams) {
     final p = param.parameter;
 
-    p as SimpleFormalParameter;
     var type = CoreTypes.dynamic.ref(ctx);
     if (p.type != null) {
       // Method args are always boxed to allow for bridge interop to have a

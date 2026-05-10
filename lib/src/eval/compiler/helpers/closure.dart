@@ -44,9 +44,9 @@ InvokeResult invokeClosure(
   final namedArgNames = <String>[];
 
   for (final arg in (argumentList?.arguments ?? [])) {
-    if (arg is NamedExpression) {
-      final nName = arg.name.label.name;
-      fNamed[nName] = compileExpression(arg.expression, ctx);
+    if (arg is NamedArgument) {
+      final nName = arg.name.toString();
+      fNamed[nName] = compileExpression(arg.argumentExpression, ctx);
     } else {
       fPositional.add(compileExpression(arg, ctx));
     }

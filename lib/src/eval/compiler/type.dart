@@ -454,7 +454,7 @@ class TypeRef {
             );
           }
           final parameter =
-              f.parameters!.parameters.first as SimpleFormalParameter;
+              f.parameters!.parameters.first as RegularFormalParameter;
           final annotation = parameter.type;
           if (annotation == null) {
             return null;
