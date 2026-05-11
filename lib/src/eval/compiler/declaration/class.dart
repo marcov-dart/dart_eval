@@ -4,8 +4,6 @@ import 'package:dart_eval/src/eval/compiler/declaration/constructor.dart';
 import 'package:dart_eval/src/eval/compiler/declaration/declaration.dart';
 import 'package:dart_eval/src/eval/compiler/type.dart';
 
-import '../../utils/class_declartation_helper.dart';
-
 void compileClassDeclaration(
   CompilerContext ctx,
   ClassDeclaration d, {
@@ -25,7 +23,7 @@ void compileClassDeclaration(
   final fields = <FieldDeclaration>[];
   final methods = <MethodDeclaration>[];
 
-  for (final m in d.members) {
+  for (final m in d.body.members) {
     if (m is ConstructorDeclaration) {
       constructors.add(m);
     } else if (m is FieldDeclaration) {

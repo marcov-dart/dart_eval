@@ -25,7 +25,6 @@ import 'package:dart_eval/src/eval/shared/stdlib/math.dart';
 import 'package:dart_eval/src/eval/shared/stdlib/typed_data.dart';
 import 'package:directed_graph/directed_graph.dart';
 
-import '../utils/class_declartation_helper.dart';
 import 'context.dart';
 import 'errors.dart';
 
@@ -491,7 +490,7 @@ class Compiler implements BridgeDeclarationRegistry, EvalPluginRegistry {
           } else if (declaration is ClassDeclaration) {
             _ctx.currentClass = declaration;
             for (final d
-                in declaration.members.whereType<FieldDeclaration>().where(
+                in declaration.body.members.whereType<FieldDeclaration>().where(
                   (e) => e.isStatic,
                 )) {
               compileFieldDeclaration(-1, d, _ctx, declaration);
@@ -679,7 +678,7 @@ class Compiler implements BridgeDeclarationRegistry, EvalPluginRegistry {
 
       _instanceDeclarationsMap[libraryIndex]![name] = {};
 
-      final members = declaration.members;
+      final members = declaration.body.members;
 
       for (var member in members) {
         if (member is MethodDeclaration) {
