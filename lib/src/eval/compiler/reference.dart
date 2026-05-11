@@ -773,8 +773,12 @@ Variable _declarationToVariable(
     if (bridge is BridgeClassDef) {
       final type = TypeRef.fromBridgeTypeRef(ctx, bridge.type.type);
 
-      return Variable(
-        -1,
+      ctx.pushOp(
+        PushConstantType.make(type.toRuntimeType(ctx).type),
+        PushConstantType.LEN,
+      );
+      return Variable.alloc(
+        ctx,
         CoreTypes.type.ref(ctx),
         concreteTypes: [type],
         methodOffset: DeferredOrOffset(file: type.file, name: '${type.name}.'),
@@ -784,8 +788,13 @@ Variable _declarationToVariable(
 
     if (bridge is BridgeEnumDef) {
       final type = TypeRef.fromBridgeTypeRef(ctx, bridge.type);
-      return Variable(
-        -1,
+
+      ctx.pushOp(
+        PushConstantType.make(type.toRuntimeType(ctx).type),
+        PushConstantType.LEN,
+      );
+      return Variable.alloc(
+        ctx,
         CoreTypes.type.ref(ctx),
         concreteTypes: [type],
         methodOffset: DeferredOrOffset(
@@ -859,8 +868,12 @@ Variable _declarationToVariable(
       offset = DeferredOrOffset(file: decOrBridge.sourceLib, name: '$name.');
     }
 
-    return Variable(
-      -1,
+    ctx.pushOp(
+      PushConstantType.make(returnType.toRuntimeType(ctx).type),
+      PushConstantType.LEN,
+    );
+    return Variable.alloc(
+      ctx,
       CoreTypes.type.ref(ctx),
       concreteTypes: [returnType],
       methodOffset: offset,
