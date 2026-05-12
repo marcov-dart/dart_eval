@@ -296,7 +296,7 @@ class TypeRef {
       // This looks very similar to ctx.currentClassName but it is not the
       // same.
       // currentClassName is currentClass.namePart.toString()
-      // (used tp be currentClass.name.lexeme)
+      // (used to be currentClass.name.lexeme)
       final name = switch (currentClass) {
         ClassDeclaration() => currentClass.namePart.typeName.stringValue,
         EnumDeclaration() => currentClass.namePart.typeName.stringValue,
