@@ -68,10 +68,7 @@ StatementInfo compileStatement(
       return compilePatternVariableDeclarationStatement(s, ctx);
     } else if (s is FunctionDeclarationStatement) {
       final decl = s.functionDeclaration;
-      final variable = compileFunctionExpression(
-        decl.functionExpression,
-        ctx,
-      );
+      final variable = compileFunctionExpression(decl.functionExpression, ctx);
       variable.name = decl.name.lexeme;
       ctx.setLocal(decl.name.lexeme, variable);
       return StatementInfo(-1);

@@ -210,10 +210,7 @@ extension Invoke on Variable {
           NumAdd.make($this.scopeFrameOffset, R.scopeFrameOffset),
           NumAdd.LEN,
         );
-        result = Variable.alloc(
-          ctx,
-          numericResultType.copyWith(boxed: false),
-        );
+        result = Variable.alloc(ctx, numericResultType.copyWith(boxed: false));
         break;
       case '-':
         // Num intrinsic sub
@@ -221,10 +218,7 @@ extension Invoke on Variable {
           NumSub.make($this.scopeFrameOffset, R.scopeFrameOffset),
           NumSub.LEN,
         );
-        result = Variable.alloc(
-          ctx,
-          numericResultType.copyWith(boxed: false),
-        );
+        result = Variable.alloc(ctx, numericResultType.copyWith(boxed: false));
         break;
 
       case '<':

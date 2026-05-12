@@ -1,5 +1,18 @@
 ## 0.8.5
+- Support for local function declarations (thanks @khoadng)
+- Support for using a Type as a value, eg `var t = List<int>` (thanks @khoadng)
 - Fix variables not being updated from within closures.
+- Fix inability to override `==` and `!=` operators.
+- Fix switch-statement `break`s inside a loop.
+- Fix code after a catch block being unreachable (thanks @khoadng)
+- Fix int assignment to setters with a double parameter (thanks @khoadng)
+- Fix `List.sort()` with default comparator (thanks @khoadng)
+- Add `Exception` class constructor binding (thanks @khoadng)
+- Improve type inference for numeric operation result types (thanks @khoadng)
+- Fix Symbol construction (thanks @wrbl606)
+- Permission objects are now directly comparable (thanks @wrbl606)
+- Fixed indexed-get set on a Map instance field (thanks @khoadng)
+- Fix `is` tests on Object-typed variables (thanks @khoadng)
 
 ## 0.8.4
 - Update analyzer to v8.
