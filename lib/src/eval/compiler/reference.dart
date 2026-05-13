@@ -627,6 +627,11 @@ class IndexedReference implements Reference {
           ? _variable.type.specifiedTypeArgs[0]
           : CoreTypes.dynamic.ref(ctx);
     }
+    if (_variable.type.isAssignableTo(ctx, CoreTypes.map.ref(ctx))) {
+      return _variable.type.specifiedTypeArgs.length >= 2
+          ? _variable.type.specifiedTypeArgs[1]
+          : CoreTypes.dynamic.ref(ctx);
+    }
     return getValue(ctx).type;
   }
 
@@ -766,8 +771,12 @@ Variable _declarationToVariable(
     if (bridge is BridgeClassDef) {
       final type = TypeRef.fromBridgeTypeRef(ctx, bridge.type.type);
 
-      return Variable(
-        -1,
+      ctx.pushOp(
+        PushConstantType.make(type.toRuntimeType(ctx).type),
+        PushConstantType.LEN,
+      );
+      return Variable.alloc(
+        ctx,
         CoreTypes.type.ref(ctx),
         concreteTypes: [type],
         methodOffset: DeferredOrOffset(file: type.file, name: '${type.name}.'),
@@ -777,8 +786,13 @@ Variable _declarationToVariable(
 
     if (bridge is BridgeEnumDef) {
       final type = TypeRef.fromBridgeTypeRef(ctx, bridge.type);
-      return Variable(
-        -1,
+
+      ctx.pushOp(
+        PushConstantType.make(type.toRuntimeType(ctx).type),
+        PushConstantType.LEN,
+      );
+      return Variable.alloc(
+        ctx,
         CoreTypes.type.ref(ctx),
         concreteTypes: [type],
         methodOffset: DeferredOrOffset(
@@ -850,8 +864,12 @@ Variable _declarationToVariable(
       offset = DeferredOrOffset(file: decOrBridge.sourceLib, name: '$name.');
     }
 
-    return Variable(
-      -1,
+    ctx.pushOp(
+      PushConstantType.make(returnType.toRuntimeType(ctx).type),
+      PushConstantType.LEN,
+    );
+    return Variable.alloc(
+      ctx,
       CoreTypes.type.ref(ctx),
       concreteTypes: [returnType],
       methodOffset: offset,
