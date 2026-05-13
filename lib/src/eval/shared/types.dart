@@ -138,6 +138,18 @@ class CoreTypes {
 
   /// Bridge type spec for [Sink]
   static const sink = BridgeTypeSpec('dart:core', 'Sink');
+
+  /// Bridge type spec for [$TypeError]
+  static const typeError = BridgeTypeSpec('dart:core', 'TypeError');
+
+  /// Bridge type spec for [$NoSuchMethodError]
+  static const noSuchMethodError = BridgeTypeSpec(
+    'dart:core',
+    'NoSuchMethodError',
+  );
+
+  /// Bridge type spec for [Invocation]
+  static const invocation = BridgeTypeSpec('dart:core', 'Invocation');
 }
 
 /// This class contains dart:async bridge type specs for convenience

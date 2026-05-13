@@ -76,6 +76,8 @@ class DartCorePlugin implements EvalPlugin {
     $Error.configureForCompile(registry);
     $UnimplementedError.configureForCompile(registry);
     $UnsupportedError.configureForCompile(registry);
+    registry.defineBridgeClass($TypeError.$declaration);
+    registry.defineBridgeClass($NoSuchMethodError.$declaration);
   }
 
   @override
@@ -189,6 +191,12 @@ class DartCorePlugin implements EvalPlugin {
       'dart:async',
       'Stream.periodic',
       $Stream.$periodic,
+    );
+    runtime.registerBridgeFunc('dart:core', 'TypeError.', $TypeError.$new);
+    runtime.registerBridgeFunc(
+      'dart:core',
+      'NoSuchMethodError.withInvocation',
+      $NoSuchMethodError.$withInvocation,
     );
   }
 }
