@@ -42,7 +42,7 @@ class PushScope implements EvcOp {
 
   @override
   void run(Runtime runtime) {
-    final frame = List<Object?>.filled(255, null);
+    final frame = List<Object?>.filled(512, null);
     runtime.stack.add(frame);
     runtime.scopeNameStack.add(frName);
     runtime.frame = frame;
