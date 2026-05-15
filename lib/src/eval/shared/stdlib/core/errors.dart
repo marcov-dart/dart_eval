@@ -1121,3 +1121,135 @@ class $StateError implements $Instance, StateError {
   @override
   String get message => $value.message;
 }
+
+/// dart_eval wrapper for [TypeError]
+class $TypeError implements $Instance, TypeError {
+  /// Configure the [$TypeError] wrapper for use in a [Runtime]
+  static void configureForCompile(BridgeDeclarationRegistry registry) {
+    registry.defineBridgeClass($declaration);
+  }
+
+  static const $declaration = BridgeClassDef(
+    BridgeClassType(BridgeTypeRef(CoreTypes.typeError)),
+    constructors: {
+      '': BridgeConstructorDef(
+        BridgeFunctionDef(
+          returns: BridgeTypeAnnotation(BridgeTypeRef(CoreTypes.typeError)),
+          params: [],
+        ),
+      ),
+    },
+    methods: {},
+    getters: {},
+    setters: {},
+    fields: {},
+    wrap: true,
+  );
+
+  final $Instance _superclass;
+
+  $TypeError.wrap(this.$value) : _superclass = $Object($value);
+
+  @override
+  final TypeError $value;
+
+  @override
+  TypeError get $reified => $value;
+
+  static $TypeError $new(Runtime runtime, $Value? target, List<$Value?> args) {
+    return $TypeError.wrap(TypeError());
+  }
+
+  @override
+  int $getRuntimeType(Runtime runtime) =>
+      runtime.lookupType(CoreTypes.typeError);
+
+  @override
+  $Value? $getProperty(Runtime runtime, String identifier) {
+    return _superclass.$getProperty(runtime, identifier);
+  }
+
+  @override
+  void $setProperty(Runtime runtime, String identifier, $Value value) {
+    return _superclass.$setProperty(runtime, identifier, value);
+  }
+
+  @override
+  StackTrace? get stackTrace => $value.stackTrace;
+}
+
+/// dart_eval wrapper for [NoSuchMethodError]
+class $NoSuchMethodError implements $Instance, NoSuchMethodError {
+  static const $declaration = BridgeClassDef(
+    BridgeClassType(BridgeTypeRef(CoreTypes.noSuchMethodError)),
+    constructors: {},
+    methods: {
+      'withInvocation': BridgeMethodDef(
+        BridgeFunctionDef(
+          returns: BridgeTypeAnnotation(
+            BridgeTypeRef(CoreTypes.noSuchMethodError, []),
+            nullable: false,
+          ),
+          params: [
+            BridgeParameter(
+              'receiver',
+              BridgeTypeAnnotation(
+                BridgeTypeRef(CoreTypes.object),
+                nullable: true,
+              ),
+              true,
+            ),
+            BridgeParameter(
+              'invocation',
+              BridgeTypeAnnotation(BridgeTypeRef(CoreTypes.invocation)),
+              true,
+            ),
+          ],
+          namedParams: [],
+        ),
+        isStatic: true,
+      ),
+    },
+    getters: {},
+    setters: {},
+    fields: {},
+    wrap: true,
+  );
+
+  final $Instance _superclass;
+
+  $NoSuchMethodError.wrap(this.$value) : _superclass = $Object($value);
+
+  @override
+  final NoSuchMethodError $value;
+
+  @override
+  NoSuchMethodError get $reified => $value;
+
+  static $NoSuchMethodError $withInvocation(
+    Runtime runtime,
+    $Value? target,
+    List<$Value?> args,
+  ) {
+    return $NoSuchMethodError.wrap(
+      NoSuchMethodError.withInvocation(args[0]?.$value, args[1]?.$value),
+    );
+  }
+
+  @override
+  int $getRuntimeType(Runtime runtime) =>
+      runtime.lookupType(CoreTypes.noSuchMethodError);
+
+  @override
+  $Value? $getProperty(Runtime runtime, String identifier) {
+    return _superclass.$getProperty(runtime, identifier);
+  }
+
+  @override
+  void $setProperty(Runtime runtime, String identifier, $Value value) {
+    return _superclass.$setProperty(runtime, identifier, value);
+  }
+
+  @override
+  StackTrace? get stackTrace => $value.stackTrace;
+}

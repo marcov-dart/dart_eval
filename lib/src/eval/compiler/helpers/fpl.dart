@@ -49,36 +49,32 @@ List<PossiblyValuedParameter> resolveFPLDefaults(
   }
 
   for (final param in [...positional, ...named]) {
-    if (param is DefaultFormalParameter) {
-      if (param.defaultValue != null && !ignoreDefaults) {
-        ctx.beginAllocScope();
-        final reserve = JumpIfNonNull.make(paramIndex, -1);
-        final reserveOffset = ctx.pushOp(reserve, JumpIfNonNull.LEN);
-        var V = compileExpression(param.defaultValue!, ctx);
-        if (!allowUnboxed || !V.type.isUnboxedAcrossFunctionBoundaries) {
-          V = V.boxIfNeeded(ctx);
-        } else if (allowUnboxed && V.type.isUnboxedAcrossFunctionBoundaries) {
-          V = V.unboxIfNeeded(ctx);
-        }
-        ctx.pushOp(
-          CopyValue.make(paramIndex, V.scopeFrameOffset),
-          CopyValue.LEN,
-        );
-        ctx.endAllocScope();
-        ctx.rewriteOp(
-          reserveOffset,
-          JumpIfNonNull.make(paramIndex, ctx.out.length),
-          0,
-        );
-        normalized.add(PossiblyValuedParameter(param.parameter, V));
-      } else {
-        if (param.defaultValue == null /* todo && param.type.nullable */ ) {
-          ctx.pushOp(MaybeBoxNull.make(paramIndex), MaybeBoxNull.LEN);
-        }
-        normalized.add(PossiblyValuedParameter(param.parameter, null));
+    final defaultClause = param.defaultClause;
+
+    if (defaultClause != null && !ignoreDefaults) {
+      final defaultValue = defaultClause.value;
+
+      ctx.beginAllocScope();
+      final reserve = JumpIfNonNull.make(paramIndex, -1);
+      final reserveOffset = ctx.pushOp(reserve, JumpIfNonNull.LEN);
+      var V = compileExpression(defaultValue, ctx);
+      if (!allowUnboxed || !V.type.isUnboxedAcrossFunctionBoundaries) {
+        V = V.boxIfNeeded(ctx);
+      } else if (allowUnboxed && V.type.isUnboxedAcrossFunctionBoundaries) {
+        V = V.unboxIfNeeded(ctx);
       }
+      ctx.pushOp(CopyValue.make(paramIndex, V.scopeFrameOffset), CopyValue.LEN);
+      ctx.endAllocScope();
+      ctx.rewriteOp(
+        reserveOffset,
+        JumpIfNonNull.make(paramIndex, ctx.out.length),
+        0,
+      );
+      normalized.add(PossiblyValuedParameter(param, V));
     } else {
-      param as NormalFormalParameter;
+      if (param.isOptional) {
+        ctx.pushOp(MaybeBoxNull.make(paramIndex), MaybeBoxNull.LEN);
+      }
       normalized.add(PossiblyValuedParameter(param, null));
     }
 

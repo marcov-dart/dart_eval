@@ -146,7 +146,7 @@ extension Invoke on Variable {
     final offset = methodOffset!;
     if (offset.file == ctx.library &&
         offset.className != null &&
-        offset.className == (ctx.currentClass?.name.lexeme)) {
+        offset.className == ctx.currentClassName) {
       final inst = ctx.lookupLocal('#this')!;
       return inst.invoke(ctx, null, args, namedArgs: namedArgs);
     }

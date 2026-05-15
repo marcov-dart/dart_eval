@@ -16,11 +16,11 @@ import 'package:dart_eval/src/eval/runtime/runtime.dart';
 int compileMethodDeclaration(
   MethodDeclaration d,
   CompilerContext ctx,
-  NamedCompilationUnitMember parent,
+  ClassDeclaration parent,
 ) {
   ///ctx.runPrescan(d);
   final b = d.body;
-  final parentName = parent.name.lexeme;
+  final parentName = parent.namePart.toString();
   final methodName = d.name.lexeme;
   final pos = beginMethod(ctx, d, d.offset, '$parentName.$methodName()');
 
@@ -40,7 +40,6 @@ int compileMethodDeclaration(
   for (final param in resolvedParams) {
     final p = param.parameter;
 
-    p as SimpleFormalParameter;
     var type = CoreTypes.dynamic.ref(ctx);
     if (p.type != null) {
       // Method args are always boxed to allow for bridge interop to have a

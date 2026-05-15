@@ -55,7 +55,7 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentList(
     final arg = argumentList.arguments.length <= i
         ? null
         : argumentList.arguments[i];
-    if (arg is NamedExpression) {
+    if (arg is NamedArgument) {
       if (param.isRequired) {
         throw CompileError('Not enough positional arguments');
       } else {
@@ -65,18 +65,22 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentList(
     } else if (arg == null) {
       if (param.isRequired) {
         throw CompileError('Not enough positional arguments');
-      } else if (param is DefaultFormalParameter) {
-        // Default parameter values are handled at the call site
-        $null ??= BuiltinValue().push(ctx);
-        push.add($null);
       } else {
-        $null ??= BuiltinValue().push(ctx);
-        push.add($null);
+        final defaultClause = param.defaultClause;
+
+        if (defaultClause != null) {
+          // Default parameter values are handled at the call site
+          $null ??= BuiltinValue().push(ctx);
+          push.add($null);
+        } else {
+          $null ??= BuiltinValue().push(ctx);
+          push.add($null);
+        }
       }
     } else {
       var paramType = CoreTypes.dynamic.ref(ctx);
       TypeAnnotation? typeAnnotation;
-      if (param is SimpleFormalParameter) {
+      if (param is RegularFormalParameter) {
         typeAnnotation = param.type;
       } else if (param is FieldFormalParameter) {
         paramType = _resolveFieldFormalType(
@@ -92,18 +96,13 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentList(
           param,
           parameterHost,
         );
-      } else if (param is DefaultFormalParameter) {
-        final p = param.parameter;
-        typeAnnotation = p is SimpleFormalParameter ? p.type : null;
-      } else {
-        throw CompileError('Unknown formal type ${param.runtimeType}');
       }
 
       if (typeAnnotation != null) {
         paramType = TypeRef.fromAnnotation(ctx, decLibrary, typeAnnotation);
       }
 
-      var arg0 = compileExpression(arg, ctx, paramType);
+      var arg0 = compileExpression(arg.argumentExpression, ctx, paramType);
       if (parameterHost is MethodDeclaration ||
           !paramType.isUnboxedAcrossFunctionBoundaries) {
         arg0 = arg0.boxIfNeeded(ctx);
@@ -142,26 +141,23 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentList(
   }
 
   for (final arg in argumentList.arguments) {
-    if (arg is NamedExpression) {
-      namedExpr[arg.name.label.name] = arg.expression;
+    if (arg is NamedArgument) {
+      namedExpr[arg.name.toString()] = arg.argumentExpression;
     }
   }
 
   for (final n in named.entries) {
     final name = n.key;
-    final param0 = n.value;
+    final param = n.value;
     if (superParams.contains(name)) {
       final V = ctx.lookupLocal(name)!;
       push.add(V);
       namedArgs[name] = V;
       continue;
     }
-    final param =
-        (param0 is DefaultFormalParameter ? param0.parameter : param0)
-            as NormalFormalParameter;
     var paramType = CoreTypes.dynamic.ref(ctx);
     TypeAnnotation? typeAnnotation;
-    if (param is SimpleFormalParameter) {
+    if (param is RegularFormalParameter) {
       typeAnnotation = param.type;
       if (typeAnnotation != null) {
         paramType = TypeRef.fromAnnotation(ctx, decLibrary, typeAnnotation);
@@ -358,7 +354,7 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentListWithDynamic(
   for (var i = 0; i < argumentList.arguments.length; i++) {
     final arg = argumentList.arguments[i];
 
-    if (arg is NamedExpression) {
+    if (arg is NamedArgument) {
       throw CompileError(
         'dart_eval does not support passing named arguments '
         'to dynamic targets.',
@@ -366,7 +362,7 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentListWithDynamic(
       );
     }
 
-    var arg0 = compileExpression(arg, ctx);
+    var arg0 = compileExpression(arg.argumentExpression, ctx);
     if (arg0.type.isUnboxedAcrossFunctionBoundaries) {
       arg0 = arg0.boxIfNeeded(ctx);
       // TODO: functions and some other types do not need to be unboxed,
@@ -414,7 +410,7 @@ compileArgumentListWithKnownMethodArgs(
       break;
     }
     final arg = argumentList.arguments[i];
-    if (arg is NamedExpression) {
+    if (arg is NamedArgument) {
       if (!param.optional) {
         throw CompileError('Not enough positional arguments');
       } else {
@@ -424,7 +420,7 @@ compileArgumentListWithKnownMethodArgs(
     } else {
       var paramType = param.type ?? CoreTypes.dynamic.ref(ctx);
 
-      var arg0 = compileExpression(arg, ctx, paramType);
+      var arg0 = compileExpression(arg.argumentExpression, ctx, paramType);
       arg0 = arg0.boxIfNeeded(ctx);
 
       if (arg0.type == CoreTypes.function.ref(ctx) &&
@@ -446,8 +442,8 @@ compileArgumentListWithKnownMethodArgs(
   }
 
   for (final arg in argumentList.arguments) {
-    if (arg is NamedExpression) {
-      namedExpr[arg.name.label.name] = arg.expression;
+    if (arg is NamedArgument) {
+      namedExpr[arg.name.toString()] = arg.argumentExpression;
     }
   }
 
@@ -510,7 +506,7 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentListWithBridge(
       continue;
     }
     final arg = argumentList.arguments[i];
-    if (arg is NamedExpression) {
+    if (arg is NamedArgument) {
       if (!param.optional) {
         throw CompileError('Not enough positional arguments');
       } else {
@@ -520,7 +516,7 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentListWithBridge(
     } else {
       var paramType = TypeRef.fromBridgeAnnotation(ctx, param.type);
 
-      var arg0 = compileExpression(arg, ctx, paramType);
+      var arg0 = compileExpression(arg.argumentExpression, ctx, paramType);
       arg0 = arg0.boxIfNeeded(ctx);
       if (arg0.type == CoreTypes.function.ref(ctx) &&
           arg0.scopeFrameOffset == -1) {
@@ -541,8 +537,8 @@ Pair<List<Variable>, Map<String, Variable>> compileArgumentListWithBridge(
   }
 
   for (final arg in argumentList.arguments) {
-    if (arg is NamedExpression) {
-      namedExpr[arg.name.label.name] = arg.expression;
+    if (arg is NamedArgument) {
+      namedExpr[arg.name.toString()] = arg.argumentExpression;
     }
   }
 
@@ -594,15 +590,33 @@ TypeRef _resolveFieldFormalType(
   if (parameterHost is! ConstructorDeclaration) {
     throw CompileError('Field formals can only occur in constructors');
   }
-  final $class = parameterHost.parent as NamedCompilationUnitMember;
-  return TypeRef.lookupFieldType(
-        ctx,
-        TypeRef.lookupDeclaration(ctx, decLibrary, $class),
-        param.name.lexeme,
-        forFieldFormal: true,
-        source: param,
-      ) ??
-      CoreTypes.dynamic.ref(ctx);
+
+  final parent = parameterHost.parent;
+  if (parent is ClassBody) {
+    final $class = parent.parent as ClassDeclaration;
+
+    return TypeRef.lookupFieldType(
+          ctx,
+          TypeRef.lookupDeclaration(ctx, decLibrary, $class),
+          param.name.lexeme,
+          forFieldFormal: true,
+          source: param,
+        ) ??
+        CoreTypes.dynamic.ref(ctx);
+  } else if (parent is EnumBody) {
+    final $enum = parent.parent as EnumDeclaration;
+
+    return TypeRef.lookupFieldType(
+          ctx,
+          TypeRef.lookupDeclaration(ctx, decLibrary, $enum),
+          param.name.lexeme,
+          forFieldFormal: true,
+          source: param,
+        ) ??
+        CoreTypes.dynamic.ref(ctx);
+  } else {
+    throw CompileError('Unsupported!');
+  }
 }
 
 TypeRef resolveSuperFormalType(
@@ -621,7 +635,7 @@ TypeRef resolveSuperFormalType(
   if (lastInit is SuperConstructorInvocation) {
     superConstructorName = lastInit.constructorName?.name ?? '';
   }
-  final $class = parameterHost.parent as ClassDeclaration;
+  final $class = parameterHost.parent!.parent as ClassDeclaration;
   final type = TypeRef.lookupDeclaration(ctx, decLibrary, $class);
   final $super =
       type.resolveTypeChain(ctx).extendsType ??
@@ -642,26 +656,23 @@ TypeRef resolveSuperFormalType(
   } else {
     final cstr = superCstr.declaration as ConstructorDeclaration;
     for (final cstrParam in cstr.parameters.parameters) {
-      var param0 = cstrParam is DefaultFormalParameter
-          ? cstrParam.parameter
-          : cstrParam;
-      if (param0.name?.lexeme != param.name.lexeme) {
+      if (cstrParam.name?.lexeme != param.name.lexeme) {
         continue;
       }
-      if (param0 is SimpleFormalParameter) {
-        final type0 = param0.type;
+      if (cstrParam is RegularFormalParameter) {
+        final type0 = cstrParam.type;
         if (type0 == null) {
           return CoreTypes.dynamic.ref(ctx);
         }
         return TypeRef.fromAnnotation(ctx, $super.file, type0);
-      } else if (param0 is FieldFormalParameter) {
-        return _resolveFieldFormalType(ctx, decLibrary, param0, cstr);
-      } else if (param0 is SuperFormalParameter) {
-        return resolveSuperFormalType(ctx, decLibrary, param0, cstr);
+      } else if (cstrParam is FieldFormalParameter) {
+        return _resolveFieldFormalType(ctx, decLibrary, cstrParam, cstr);
+      } else if (cstrParam is SuperFormalParameter) {
+        return resolveSuperFormalType(ctx, decLibrary, cstrParam, cstr);
       } else {
         throw CompileError(
-          'Unknown parameter type ${param0.runtimeType}',
-          param0,
+          'Unknown parameter type ${cstrParam.runtimeType}',
+          cstrParam,
         );
       }
     }

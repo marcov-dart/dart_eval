@@ -23,10 +23,15 @@ import '../variable.dart';
 void compileConstructorDeclaration(
   CompilerContext ctx,
   ConstructorDeclaration d,
-  NamedCompilationUnitMember parent,
+  Declaration parent,
   List<FieldDeclaration> fields,
 ) {
-  final parentName = parent.name.lexeme;
+  final parentName = switch (parent) {
+    ClassDeclaration() => parent.namePart.toString(),
+    EnumDeclaration() => parent.namePart.toString(),
+    Declaration() => throw UnimplementedError(),
+  };
+
   final dName = (d.name?.lexeme) ?? "";
   final n = '$parentName.$dName';
   final isEnum = parent is EnumDeclaration;
@@ -94,7 +99,7 @@ void compileConstructorDeclaration(
     final p = param.parameter;
     final V = param.V;
     Variable vrep;
-    if ($redirectingInitializer != null && p is! SimpleFormalParameter) {
+    if ($redirectingInitializer != null && p is! RegularFormalParameter) {
       throw CompileError(
         'Redirecting constructor invocation cannot have super or this parameters',
         d,
@@ -128,7 +133,6 @@ void compileConstructorDeclaration(
       ).boxIfNeeded(ctx)..name = p.name.lexeme;
       superParams.add(p.name.lexeme);
     } else {
-      p as SimpleFormalParameter;
       var type = CoreTypes.dynamic.ref(ctx);
       if (p.type != null) {
         type = TypeRef.fromAnnotation(ctx, ctx.library, p.type!);
@@ -344,7 +348,7 @@ void compileConstructorDeclaration(
   final op = CreateClass.make(
     ctx.library,
     $super.scopeFrameOffset,
-    parent.name.lexeme,
+    parentName,
     fieldIdx + (isEnum ? 2 : 0),
   );
   ctx.pushOp(op, CreateClass.len(op));
@@ -473,10 +477,15 @@ void compileConstructorDeclaration(
 
 void compileDefaultConstructor(
   CompilerContext ctx,
-  NamedCompilationUnitMember parent,
+  Declaration parent,
   List<FieldDeclaration> fields,
 ) {
-  final parentName = parent.name.lexeme;
+  final parentName = switch (parent) {
+    ClassDeclaration() => parent.namePart.toString(),
+    EnumDeclaration() => parent.namePart.toString(),
+    Declaration() => throw UnimplementedError(),
+  };
+
   final n = '$parentName.';
 
   ctx.topLevelDeclarationPositions[ctx.library]![n] = beginMethod(
@@ -570,7 +579,7 @@ void compileDefaultConstructor(
   final op = CreateClass.make(
     ctx.library,
     $super.scopeFrameOffset,
-    parent.name.lexeme,
+    parentName,
     fieldIdx + (isEnum ? 2 : 0),
   );
   ctx.pushOp(op, CreateClass.len(op));
@@ -648,13 +657,11 @@ void _compileUnusedFields(
     for (final field in fd.fields.variables) {
       if (!usedNames.contains(field.name.lexeme) && field.initializer != null) {
         final V = compileExpression(field.initializer!, ctx).boxIfNeeded(ctx);
+
         ctx.inferredFieldTypes
-                .putIfAbsent(ctx.library, () => {})
-                .putIfAbsent(
-                  ctx.currentClass!.name.lexeme,
-                  () => {},
-                )[field.name.lexeme] =
-            V.type;
+            .putIfAbsent(ctx.library, () => {})
+            .putIfAbsent(ctx.currentClassName!, () => {})[field.name.lexeme] = V
+            .type;
         ctx.pushOp(
           SetObjectPropertyImpl.make(instOffset, fieldIdx0, V.scopeFrameOffset),
           SetObjectPropertyImpl.length,
@@ -669,7 +676,7 @@ void _setupEnum(CompilerContext ctx, EnumDeclaration parent, int instOffset) {
   /// Add implicit index and name fields
   ctx.inferredFieldTypes
       .putIfAbsent(ctx.library, () => {})
-      .putIfAbsent(ctx.currentClass!.name.lexeme, () => {})
+      .putIfAbsent(ctx.currentClassName!, () => {})
     ..['index'] = CoreTypes.int.ref(ctx)
     ..['name'] = CoreTypes.string.ref(ctx);
 

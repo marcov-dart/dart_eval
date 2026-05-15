@@ -70,6 +70,7 @@ void main() {
       final runPerm = ProcessRunPermission.namedExecutable('dart');
       final killPerm = ProcessKillPermisssion(1234);
 
+      // ignore: unrelated_type_equality_checks
       expect(runPerm == killPerm, isFalse);
     });
   });
@@ -131,6 +132,7 @@ void main() {
       final killPerm = ProcessKillPermisssion(1234);
       final runPerm = ProcessRunPermission.any;
 
+      // ignore: unrelated_type_equality_checks
       expect(killPerm == runPerm, isFalse);
     });
   });

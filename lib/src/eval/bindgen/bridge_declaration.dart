@@ -147,7 +147,7 @@ String getters(BindgenContext ctx, InterfaceElement element) {
       .where((element) => !element.isPrivate)
       .where(
         (element) =>
-            !element.isSynthetic ||
+            !element.isOriginVariable ||
             (element is EnumElement &&
                 element.nonSynthetic is FieldElement &&
                 !(element.nonSynthetic as FieldElement).isEnumConstant),
@@ -165,7 +165,7 @@ String setters(BindgenContext ctx, InterfaceElement element) {
   };
 
   return setters.values
-      .where((element) => !element.isSynthetic && !element.isPrivate)
+      .where((element) => !element.isOriginVariable && !element.isPrivate)
       .map((e) => bridgeSetterDef(ctx, setter: e))
       .join('\n');
 }
@@ -180,10 +180,11 @@ String fields(BindgenContext ctx, InterfaceElement element) {
     for (final f in element.fields) f.name: f,
   };
 
-  final fields = allFields.values.where(
-    (element) =>
-        !element.isSynthetic && !element.isEnumConstant && !element.isPrivate,
-  );
+  final fields = allFields.values.where((element) {
+    return !element.isOriginGetterSetter &&
+        !element.isEnumConstant &&
+        !element.isPrivate;
+  });
 
   return fields.map((e) => bridgeFieldDef(ctx, field: e)).join('\n');
 }

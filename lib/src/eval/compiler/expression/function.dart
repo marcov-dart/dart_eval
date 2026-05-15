@@ -72,7 +72,6 @@ Variable compileFunctionExpression(
     final p = param.parameter;
     Variable vRep;
 
-    p as SimpleFormalParameter;
     var type = CoreTypes.dynamic.ref(ctx);
     if (p.type != null) {
       type = TypeRef.fromAnnotation(ctx, ctx.library, p.type!);
@@ -140,12 +139,7 @@ Variable compileFunctionExpression(
       .length;
 
   final positionalArgTypes = positional
-      .map(
-        (a) => a is NormalFormalParameter
-            ? a
-            : (a as DefaultFormalParameter).parameter,
-      )
-      .cast<SimpleFormalParameter>()
+      .cast<RegularFormalParameter>()
       .mapIndexed((i, a) {
         if (a.type != null) {
           return TypeRef.fromAnnotation(ctx, ctx.library, a.type!);
@@ -171,8 +165,7 @@ Variable compileFunctionExpression(
       .toList();
 
   final sortedNamedArgTypes = sortedNamedArgs
-      .map((e) => e is DefaultFormalParameter ? e.parameter : e)
-      .cast<SimpleFormalParameter>()
+      .cast<RegularFormalParameter>()
       .mapIndexed((i, a) {
         if (a.type != null) {
           return TypeRef.fromAnnotation(ctx, ctx.library, a.type!);

@@ -89,7 +89,7 @@ Variable compileMethodInvocation(
   final offset = method.methodOffset!;
   if (offset.file == ctx.library &&
       offset.className != null &&
-      offset.className == (ctx.currentClass?.name.lexeme)) {
+      offset.className == (ctx.currentClassName)) {
     final $this = ctx.lookupLocal('#this')!;
     return _invokeWithTarget(ctx, $this, e);
   }
@@ -257,7 +257,7 @@ Variable compileMethodInvocation(
 
   TypeRef? thisType;
   if (ctx.currentClass != null) {
-    thisType = ctx.visibleTypes[ctx.library]![ctx.currentClass!.name.lexeme]!;
+    thisType = ctx.visibleTypes[ctx.library]![ctx.currentClassName!]!;
   }
 
   mReturnType ??=
