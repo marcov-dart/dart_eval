@@ -28,9 +28,8 @@ dynamic eval(
 
   var source0 = source;
 
-  if (!RegExp(
-    r'(?:\w* )?' + function + r'\s?\([\s\S]*?\)\s?({|=>)',
-  ).hasMatch(source0)) {
+  if (!RegExp(r'(?:\w* )?' + function + r'\s?\([\s\S]*?\)\s?({|=>)')
+      .hasMatch(source0)) {
     if (!source0.contains(';')) {
       source0 = '$source0;';
       if (!source0.contains('return')) {

@@ -31,9 +31,11 @@ class BridgeInstantiate implements EvcOp {
     runtime.args = [];
 
     final $runtimeType = 1;
-    final instance =
-        runtime._bridgeFunctions[_constructor](runtime, null, mappedArgs)
-            as $Instance;
+    final instance = runtime._bridgeFunctions[_constructor](
+      runtime,
+      null,
+      mappedArgs,
+    ) as $Instance;
     Runtime.bridgeData[instance] = BridgeData(
       runtime,
       $runtimeType,

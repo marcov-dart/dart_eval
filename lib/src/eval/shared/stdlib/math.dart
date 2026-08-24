@@ -1,7 +1,9 @@
 import 'dart:math' as math;
+
 import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/src/eval/shared/stdlib/core/num.dart';
 import 'package:dart_eval/src/eval/shared/stdlib/math/random.dart';
+
 import 'math/point.dart';
 
 const mathSource = '''

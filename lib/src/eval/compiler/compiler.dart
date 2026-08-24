@@ -1302,9 +1302,9 @@ Map<Library, Map<String, DeclarationOrPrefix>> _resolveImportsAndExports(
           (declaration) =>
               declaration.isBridge ||
               DeclarationOrBridge.nameOf(declaration).any(
-                (name) => {
-                  ...?usedDeclarationsForLibrary[libraryIds[l]],
-                }.contains(name),
+                (name) =>
+                    {...?usedDeclarationsForLibrary[libraryIds[l]]}
+                        .contains(name),
               ),
         )
         .toList();

@@ -1,5 +1,6 @@
 // ignore_for_file: body_might_complete_normally_nullable
 import 'dart:math' as math;
+
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/src/eval/compiler/builtins.dart';
@@ -109,12 +110,10 @@ mixin ScopeContext on Object implements AbstractScopeContext {
 
   void resolveNonlinearity([int depth = 1]) {
     for (var i = 0; i < depth; i++) {
-      <String, Variable>{...(locals[locals.length - depth])}.forEach((
-        key,
-        value,
-      ) {
-        locals[locals.length - depth][key] = value.unboxIfNeeded(this);
-      });
+      <String, Variable>{...(locals[locals.length - depth])}
+          .forEach((key, value) {
+            locals[locals.length - depth][key] = value.unboxIfNeeded(this);
+          });
     }
   }
 
@@ -276,9 +275,8 @@ class CompilerContext with ScopeContext {
         if (frameRef.isNotEmpty) {
           var frOffset = frameRef[0].scopeFrameOffset;
           for (var i = 0; i < frameRef.length - 1; i++) {
-            final index = BuiltinValue(
-              intval: frameRef[i + 1].scopeFrameOffset,
-            ).push(this);
+            final index = BuiltinValue(intval: frameRef[i + 1].scopeFrameOffset)
+                .push(this);
             pushOp(
               IndexList.make(frOffset, index.scopeFrameOffset),
               IndexList.LEN,

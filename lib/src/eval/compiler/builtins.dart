@@ -272,56 +272,80 @@ Map<TypeRef, Map<String, KnownMethod>> getKnownMethods(CompilerContext ctx) {
         KnownMethodArg('pattern', CoreTypes.pattern.ref(ctx), false),
         KnownMethodArg('start', CoreTypes.int.ref(ctx), true),
       ], {}),
-      'lastIndexOf':
-          KnownMethod(AlwaysReturnType(CoreTypes.int.ref(ctx), false), [
-            KnownMethodArg('pattern', CoreTypes.pattern.ref(ctx), false),
-            KnownMethodArg('start', CoreTypes.int.ref(ctx), true),
-          ], {}),
-      'padLeft':
-          KnownMethod(AlwaysReturnType(CoreTypes.string.ref(ctx), false), [
-            KnownMethodArg('width', CoreTypes.int.ref(ctx), false),
-            KnownMethodArg('padding', CoreTypes.string.ref(ctx), true),
-          ], {}),
-      'padRight':
-          KnownMethod(AlwaysReturnType(CoreTypes.string.ref(ctx), false), [
-            KnownMethodArg('width', CoreTypes.int.ref(ctx), false),
-            KnownMethodArg('padding', CoreTypes.string.ref(ctx), true),
-          ], {}),
-      'replaceAll':
-          KnownMethod(AlwaysReturnType(CoreTypes.string.ref(ctx), false), [
-            KnownMethodArg('pattern', CoreTypes.pattern.ref(ctx), false),
-            KnownMethodArg('replace', CoreTypes.string.ref(ctx), false),
-          ], {}),
-      'replaceFirst':
-          KnownMethod(AlwaysReturnType(CoreTypes.string.ref(ctx), false), [
-            KnownMethodArg('from', CoreTypes.pattern.ref(ctx), false),
-            KnownMethodArg('to', CoreTypes.pattern.ref(ctx), false),
-            KnownMethodArg('startIndex', CoreTypes.int.ref(ctx), true),
-          ], {}),
-      'replaceRange':
-          KnownMethod(AlwaysReturnType(CoreTypes.string.ref(ctx), false), [
-            KnownMethodArg('start', CoreTypes.int.ref(ctx), false),
-            KnownMethodArg(
-              'end',
-              CoreTypes.int.ref(ctx).copyWith(nullable: true),
-              false,
-            ),
-            KnownMethodArg('replacement', CoreTypes.string.ref(ctx), false),
-          ], {}),
-      'startsWith':
-          KnownMethod(AlwaysReturnType(CoreTypes.bool.ref(ctx), false), [
-            KnownMethodArg('pattern', CoreTypes.pattern.ref(ctx), false),
-            KnownMethodArg('index', CoreTypes.int.ref(ctx), true),
-          ], {}),
-      'substring':
-          KnownMethod(AlwaysReturnType(CoreTypes.string.ref(ctx), false), [
-            KnownMethodArg('start', CoreTypes.int.ref(ctx), false),
-            KnownMethodArg(
-              'end',
-              CoreTypes.int.ref(ctx).copyWith(nullable: true),
-              true,
-            ),
-          ], {}),
+      'lastIndexOf': KnownMethod(
+        AlwaysReturnType(CoreTypes.int.ref(ctx), false),
+        [
+          KnownMethodArg('pattern', CoreTypes.pattern.ref(ctx), false),
+          KnownMethodArg('start', CoreTypes.int.ref(ctx), true),
+        ],
+        {},
+      ),
+      'padLeft': KnownMethod(
+        AlwaysReturnType(CoreTypes.string.ref(ctx), false),
+        [
+          KnownMethodArg('width', CoreTypes.int.ref(ctx), false),
+          KnownMethodArg('padding', CoreTypes.string.ref(ctx), true),
+        ],
+        {},
+      ),
+      'padRight': KnownMethod(
+        AlwaysReturnType(CoreTypes.string.ref(ctx), false),
+        [
+          KnownMethodArg('width', CoreTypes.int.ref(ctx), false),
+          KnownMethodArg('padding', CoreTypes.string.ref(ctx), true),
+        ],
+        {},
+      ),
+      'replaceAll': KnownMethod(
+        AlwaysReturnType(CoreTypes.string.ref(ctx), false),
+        [
+          KnownMethodArg('pattern', CoreTypes.pattern.ref(ctx), false),
+          KnownMethodArg('replace', CoreTypes.string.ref(ctx), false),
+        ],
+        {},
+      ),
+      'replaceFirst': KnownMethod(
+        AlwaysReturnType(CoreTypes.string.ref(ctx), false),
+        [
+          KnownMethodArg('from', CoreTypes.pattern.ref(ctx), false),
+          KnownMethodArg('to', CoreTypes.pattern.ref(ctx), false),
+          KnownMethodArg('startIndex', CoreTypes.int.ref(ctx), true),
+        ],
+        {},
+      ),
+      'replaceRange': KnownMethod(
+        AlwaysReturnType(CoreTypes.string.ref(ctx), false),
+        [
+          KnownMethodArg('start', CoreTypes.int.ref(ctx), false),
+          KnownMethodArg(
+            'end',
+            CoreTypes.int.ref(ctx).copyWith(nullable: true),
+            false,
+          ),
+          KnownMethodArg('replacement', CoreTypes.string.ref(ctx), false),
+        ],
+        {},
+      ),
+      'startsWith': KnownMethod(
+        AlwaysReturnType(CoreTypes.bool.ref(ctx), false),
+        [
+          KnownMethodArg('pattern', CoreTypes.pattern.ref(ctx), false),
+          KnownMethodArg('index', CoreTypes.int.ref(ctx), true),
+        ],
+        {},
+      ),
+      'substring': KnownMethod(
+        AlwaysReturnType(CoreTypes.string.ref(ctx), false),
+        [
+          KnownMethodArg('start', CoreTypes.int.ref(ctx), false),
+          KnownMethodArg(
+            'end',
+            CoreTypes.int.ref(ctx).copyWith(nullable: true),
+            true,
+          ),
+        ],
+        {},
+      ),
       'toLowerCase': KnownMethod(
         AlwaysReturnType(CoreTypes.string.ref(ctx), false),
         [],

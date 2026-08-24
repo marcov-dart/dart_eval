@@ -16,6 +16,7 @@ import 'package:dart_eval/src/eval/bindgen/properties.dart';
 import 'package:dart_eval/src/eval/bindgen/statics.dart';
 import 'package:dart_eval/src/eval/bindgen/type.dart';
 import 'package:dart_eval/src/eval/compiler/errors.dart';
+
 import 'dart:io' as io;
 
 import 'package:package_config/package_config.dart';

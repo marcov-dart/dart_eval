@@ -1,6 +1,7 @@
 import 'package:dart_eval/dart_eval_bridge.dart';
 import 'package:dart_eval/src/eval/shared/stdlib/core/num.dart';
 import 'package:dart_eval/src/eval/shared/stdlib/io/string_sink.dart';
+
 import 'base.dart';
 
 /// dart_eval wrapper for [StringBuffer]

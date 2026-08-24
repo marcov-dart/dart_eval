@@ -199,15 +199,15 @@ extension TearOff on Variable {
         .toList();
 
     BuiltinValue(intval: requiredPositionalArgCount).push(ctx).pushArg(ctx);
-    BuiltinValue(
-      intval: ctx.constantPool.addOrGet(positionalArgTypes),
-    ).push(ctx).pushArg(ctx);
-    BuiltinValue(
-      intval: ctx.constantPool.addOrGet(sortedNamedArgNames),
-    ).push(ctx).pushArg(ctx);
-    BuiltinValue(
-      intval: ctx.constantPool.addOrGet(sortedNamedArgTypes),
-    ).push(ctx).pushArg(ctx);
+    BuiltinValue(intval: ctx.constantPool.addOrGet(positionalArgTypes))
+        .push(ctx)
+        .pushArg(ctx);
+    BuiltinValue(intval: ctx.constantPool.addOrGet(sortedNamedArgNames))
+        .push(ctx)
+        .pushArg(ctx);
+    BuiltinValue(intval: ctx.constantPool.addOrGet(sortedNamedArgTypes))
+        .push(ctx)
+        .pushArg(ctx);
 
     ctx.pushOp(PushFunctionPtr.make(fnOffset), PushFunctionPtr.LEN);
 

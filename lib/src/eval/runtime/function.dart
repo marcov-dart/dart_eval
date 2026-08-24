@@ -7,8 +7,11 @@ import 'package:dart_eval/src/eval/shared/stdlib/core/object.dart';
 import '../../../dart_eval_bridge.dart';
 
 /// Typedef of a function that can be called by dart_eval.
-typedef EvalCallableFunc =
-    $Value? Function(Runtime runtime, $Value? target, List<$Value?> args);
+typedef EvalCallableFunc = $Value? Function(
+  Runtime runtime,
+  $Value? target,
+  List<$Value?> args,
+);
 
 /// Abstract supertype for values representing a callable in dart_eval.
 abstract class EvalCallable {
