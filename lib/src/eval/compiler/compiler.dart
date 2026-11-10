@@ -23,7 +23,7 @@ import 'package:dart_eval/src/eval/shared/stdlib/core.dart';
 import 'package:dart_eval/src/eval/shared/stdlib/io.dart';
 import 'package:dart_eval/src/eval/shared/stdlib/math.dart';
 import 'package:dart_eval/src/eval/shared/stdlib/typed_data.dart';
-import 'package:directed_graph/directed_graph.dart';
+import 'package:directed_graph/directed_graph.dart' hide Pair;
 
 import 'context.dart';
 import 'errors.dart';
@@ -1302,9 +1302,9 @@ Map<Library, Map<String, DeclarationOrPrefix>> _resolveImportsAndExports(
           (declaration) =>
               declaration.isBridge ||
               DeclarationOrBridge.nameOf(declaration).any(
-                (name) =>
-                    {...?usedDeclarationsForLibrary[libraryIds[l]]}
-                        .contains(name),
+                (name) => {
+                  ...?usedDeclarationsForLibrary[libraryIds[l]],
+                }.contains(name),
               ),
         )
         .toList();
